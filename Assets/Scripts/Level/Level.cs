@@ -14,18 +14,7 @@ namespace HackedDesign
         //public ProxyRoom[,] proxyLevel;
         public int length;
         public Spawn playerSpawn;
-        public List<Spawn> npcSpawnLocationList;
         public List<Spawn> enemySpawnLocationList;
-        public List<Spawn> trapSpawnLocationList;
-        //public Timer timer = new Timer();
-        public bool completed = false;
-        public float startTime = 0;
-        public int infoCollected = 0;
-        public int alertLevel = 0;
-        public int maxInfo = 10;
-        public int completeCredits = 500;
-        public int creditsCollected = 0;
-        public bool entryTriggered = false;
 
         public Level(LevelGenTemplate template)
         {
@@ -65,7 +54,7 @@ namespace HackedDesign
         public List<Vector2Int> MovementDirections(Vector2Int pos, bool entryAllowed, bool endAllowed)
         {
             var results = PossibleMovementDirections(pos);
-            return results.TakeWhile(r => (!map[r.y].rooms[r.x].isEnd && !map[r.y].rooms[r.x].isEntry) || (map[r.y].rooms[r.x].isEnd && endAllowed) || (map[r.y].rooms[r.x].isEntry && entryAllowed)).ToList();
+            return results.TakeWhile(r => (!map[r.y].rooms[r.x].isExit && !map[r.y].rooms[r.x].isEntry) || (map[r.y].rooms[r.x].isExit && endAllowed) || (map[r.y].rooms[r.x].isEntry && entryAllowed)).ToList();
         }
 
         public List<Vector2Int> PossibleMovementDirections(Vector2Int pos)
@@ -158,7 +147,7 @@ namespace HackedDesign
                             line += "[" + map[i].rooms[j].ToString() + "]";
 
                         }
-                        else if (map[i].rooms[j].isEnd)
+                        else if (map[i].rooms[j].isExit)
                         {
                             line += "{" + map[i].rooms[j].ToString() + "}";
 

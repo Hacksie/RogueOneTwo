@@ -8,7 +8,7 @@ namespace HackedDesign
     public class ProxyRoom
     {
         public bool isEntry = false;
-        public bool isEnd = false;
+        public bool isExit = false;
         public bool isMainChain = false;
         public bool isNearEntry = false;
 
@@ -43,12 +43,6 @@ namespace HackedDesign
         public override string ToString() => "" + left + top + bottom + right;
     }
 
-
-    [System.Serializable]
-    public class Corner
-    {
-        public string name;
-    }
 
     [System.Serializable]
     public class ProxyRow

@@ -9,21 +9,7 @@ namespace HackedDesign
 {
     public class LevelRenderer : MonoBehaviour
     {
-        private const string TOPLEFT = "tl";
-        private const string TOPRIGHT = "tr";
-        private const string BOTTOMLEFT = "bl";
-        private const string BOTTOMRIGHT = "br";
-
         [SerializeField] private GameObject levelParent;
-        [Header("Prefabs")]
-        [SerializeField] private GameObject doorewPrefab = null;
-        [SerializeField] private GameObject doornsPrefab = null;
-        [SerializeField] private GameObject exitewPrefab = null;
-        [SerializeField] private GameObject exitnsPrefab = null;
-        [SerializeField] private GameObject entryewPrefab = null;
-        [SerializeField] private GameObject entrynsPrefab = null;
-        [SerializeField] private GameObject pointOfInterestPrefab = null;
-
 
         public void Render(Level level)
         {
@@ -37,6 +23,7 @@ namespace HackedDesign
             // Destroy Tiles
             for (int k = 0; k < levelParent.transform.childCount; k++)
             {
+                levelParent.transform.GetChild(k).gameObject.SetActive(false);
                 Destroy(levelParent.transform.GetChild(k).gameObject);
             }
         }
@@ -104,6 +91,17 @@ namespace HackedDesign
                             continue;
                         }
                         Instantiate(go, roomPosition, go.transform.rotation, levelParent.transform);
+                    }
+
+
+                    if (room.isEntry)
+                    {
+                        Instantiate(level.template.entryElement, roomPosition, Quaternion.identity, levelParent.transform);
+                    }
+
+                    if (room.isExit)
+                    {
+                        Instantiate(level.template.exitElement, roomPosition, Quaternion.identity, levelParent.transform);
                     }
                 }
             }

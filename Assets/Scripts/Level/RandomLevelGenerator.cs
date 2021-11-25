@@ -93,7 +93,7 @@ namespace HackedDesign
             {
                 Debug.Log("RandomLevelGenerator " + "End of main chain");
                 level.map[newLocation.y].rooms[newLocation.x] = GenerateRoom(newLocation, new List<string>() { ProxyRoom.Wall }, true, level); // Place a new tile here
-                level.map[newLocation.y].rooms[newLocation.x].isEnd = true;
+                level.map[newLocation.y].rooms[newLocation.x].isExit = true;
                 return true;
             }
 
@@ -255,7 +255,7 @@ namespace HackedDesign
             return new ProxyRoom()
             {
                 isEntry = false,
-                isEnd = false,
+                isExit = false,
                 isMainChain = isMainChain,
                 top = tops[0],
                 left = lefts[0],
@@ -403,7 +403,7 @@ namespace HackedDesign
             {
                 for (int x = 0; x < level.map[y].rooms.Count(); x++)
                 {
-                    if (level.map[y].rooms[x] != null && !level.map[y].rooms[x].isNearEntry && !level.map[y].rooms[x].isEnd)
+                    if (level.map[y].rooms[x] != null && !level.map[y].rooms[x].isNearEntry && !level.map[y].rooms[x].isExit)
                     {
                         candidates.Add(new Vector2Int(x, y));
                     }

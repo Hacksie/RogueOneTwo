@@ -9,10 +9,6 @@ namespace HackedDesign
     [CreateAssetMenu(fileName = "LevelTemplate", menuName = "Rogue12/Level/Level Template")]
     public class LevelGenTemplate : ScriptableObject
     {
-        public string corp;
-        public string location;
-        public string level;
-
         public int levelLength = 7;
         public int levelWidth = 10;
         public int levelHeight = 10;
@@ -24,16 +20,12 @@ namespace HackedDesign
         
         public string startingRoomString = "wnww_entry";
  
-        // public List<GameObject> floors;
-        // public List<GameObject> mainChainFloor;
+        public GameObject doornsElement;
+        public GameObject doorewElement;
+        public GameObject entryElement;
+        public GameObject exitElement;
         public List<GameObject> levelElements;
-        // public List<GameObject> endProps;
-        // public List<GameObject> startProps;
-        // public List<GameObject> randomProps;
-        // public List<GameObject> fixedProps;
-        // public List<GameObject> lineOfSightProps;
 
-        //public List<string> traps;
         public List<string> enemies;
     }
 
