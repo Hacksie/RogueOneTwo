@@ -11,7 +11,6 @@ namespace HackedDesign
     {
         public LevelGenTemplate template;
         public ProxyRow[] map;
-        //public ProxyRoom[,] proxyLevel;
         public int length;
         public Spawn playerSpawn;
         public List<Spawn> enemySpawnLocationList;

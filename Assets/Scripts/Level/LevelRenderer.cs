@@ -10,12 +10,13 @@ namespace HackedDesign
     public class LevelRenderer : MonoBehaviour
     {
         [SerializeField] private GameObject levelParent;
+        
 
         public void Render(Level level)
         {
-            Debug.Log(name + "rendering level");
             DestroyLevel();
             PopulateLevelTilemap(level);
+            PopulateEnemySpawns(level);
         }
 
         public void DestroyLevel()
@@ -34,7 +35,6 @@ namespace HackedDesign
             {
                 for (int j = 0; j < level.map[i].rooms.Count(); j++)
                 {
-
                     var room = level.map[i].rooms[j];
 
                     if (room == null)
@@ -42,7 +42,7 @@ namespace HackedDesign
                         continue;
                     }
 
-                    Vector3 roomPosition = new Vector3(j * level.template.spanHorizontal, i * -level.template.spanVertical + ((level.template.levelHeight - 1) * level.template.spanVertical), 0);
+                    Vector3 roomPosition = new Vector3(j * level.template.spanHorizontal + (level.template.spanHorizontal / 2), i * -level.template.spanVertical + ((level.template.levelHeight - 1) * level.template.spanVertical) + (level.template.spanVertical / 2), 0);
 
                     // BL
                     for (int e = 0; e < room.bottomLeft.Count; e++)
@@ -107,9 +107,8 @@ namespace HackedDesign
             }
         }
 
-        GameObject FindRoomEntity(string name, LevelGenTemplate levelGenTemplate)
-        {
-            return levelGenTemplate.levelElements.FirstOrDefault(g => g != null && g.name == name);
-        }
+        GameObject FindRoomEntity(string name, LevelGenTemplate levelGenTemplate) => levelGenTemplate.levelElements.FirstOrDefault(g => g != null && g.name == name);
+
+        public void PopulateEnemySpawns(Level level) => EnemyPool.Instance.SpawnEnemies(level);
     }
 }

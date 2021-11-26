@@ -11,7 +11,7 @@ namespace HackedDesign
     {
         protected const string DefaultRoomStart = "wnew_entry";
 
-        public override Level GenerateLevel(LevelGenTemplate template, int length, int height, int width, int enemies)
+        public override Level GenerateLevel(LevelGenTemplate template, int length, int height, int width, int enemyCount)
         {
             if (template is null)
             {
@@ -24,16 +24,15 @@ namespace HackedDesign
             template.levelLength = length > 0 ? length : template.levelLength;
             template.levelHeight = height > 0 ? height : template.levelHeight;
             template.levelWidth = width > 0 ? width : template.levelWidth;
-            template.enemyCount = enemies > 0 ? enemies : template.enemyCount;
+            template.enemyCount = enemyCount > 0 ? enemyCount : template.enemyCount;
 
             Debug.Log("RandomLevelGenerator: " + "Generating Level " + template.levelLength.ToString() + " x " + template.levelWidth.ToString() + " x " + template.levelHeight.ToString());
 
             Level level;
 
             level = GenerateRandomLevel(template);
-            // GenerateEnemySpawns(level);
             GenerateElements(level);
-
+            GenerateEnemySpawns(level, enemyCount);
             level.Print();
             return level;
         }
@@ -55,8 +54,6 @@ namespace HackedDesign
             }
 
             GenerateAuxRooms(level);
-
-            level.Print();
 
             return level;
         }
@@ -394,7 +391,7 @@ namespace HackedDesign
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool PositionHasRoom(Vector2Int pos, Level level) => ((pos.x >= level.template.levelWidth || pos.y >= level.template.levelHeight || pos.x < 0 || pos.y < 0) || (level.map[pos.y].rooms[pos.x] != null));
 
-        private void GenerateEnemySpawns(Level level)
+        private void GenerateEnemySpawns(Level level, int enemyCount)
         {
             var candidates = new List<Vector2Int>();
             level.enemySpawnLocationList = new List<Spawn>();
@@ -420,7 +417,7 @@ namespace HackedDesign
                 return;
             }
 
-            List<Vector2Int> list = candidates.Take(level.template.enemyCount).ToList();
+            List<Vector2Int> list = candidates.Take(enemyCount).ToList();
             for (int i = list.Count - 1; i >= 0; i--)
             {
                 Vector2Int candidate = list[i];
@@ -430,7 +427,7 @@ namespace HackedDesign
                     new Spawn()
                     {
                         type = Spawn.ENTITY_TYPE_ENEMY,
-                        name = enemy,
+                        name = enemy.name,
                         levelLocation = candidate,
                         worldOffset = Vector2.zero
                     }

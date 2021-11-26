@@ -17,7 +17,7 @@ MonoBehaviour:
   levelHeight: 10
   spanHorizontal: 8
   spanVertical: 8
-  enemyCount: 0
+  enemyCount: 7
   generateDoors: 1
   startingRoomString: wnww_entry
   doornsElement: {fileID: 0}
@@ -61,4 +61,7 @@ MonoBehaviour:
   - {fileID: 3531187506359426453, guid: 63430ff89849fe44686136b7d1a2447a, type: 3}
   - {fileID: 7014011915644132943, guid: 29a5a0cca2eec9d488afe217c5a1a7fa, type: 3}
   - {fileID: 2987456321400321678, guid: 8f8045c42b8b139418445eb634652d79, type: 3}
-  enemies: []
+  enemies:
+  - {fileID: 1739751642503693436, guid: e4afbe45c86d81246a8a2adbe5eeb9de, type: 3}
+  - {fileID: 7066247932576893352, guid: 98a841581165705419d5440633a5c3ed, type: 3}
+  - {fileID: 6811751751402096134, guid: a453da3ddbb89214baaf61a9713c6c99, type: 3}

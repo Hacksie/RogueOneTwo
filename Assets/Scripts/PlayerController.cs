@@ -11,6 +11,7 @@ namespace HackedDesign
         [SerializeField] private Camera mainCamera;
         [SerializeField] private new Rigidbody2D rigidbody;
         [SerializeField] private SpriteRenderer sprite;
+        [SerializeField] private Transform forceArrow;
         [Header("Settings")]
         [SerializeField] private PlayerSettings settings;
 
@@ -18,8 +19,10 @@ namespace HackedDesign
         private Vector3 direction;
 
         private PlayingState state = PlayingState.Waiting;
-        private bool charge = false;
+
         private float chargeStartTime = 0;
+
+        public bool Attacking { get { return state == PlayingState.Attacking; } }
 
         void Awake()
         {
@@ -31,11 +34,11 @@ namespace HackedDesign
 
         void Start()
         {
-            sprite.color = Game.Instance.CurrentColor;
+            UpdateColor();
         }
 
         // Update is called once per frame
-        void Update()
+        public void UpdateBehaviour()
         {
             UpdateArrow();
             CheckAttackOver();
@@ -43,53 +46,60 @@ namespace HackedDesign
 
         public void OnFire(InputValue value)
         {
-            if (state == PlayingState.Waiting)
+            if (state == PlayingState.Waiting && value.isPressed)
             {
-                Debug.Log("X");
-                if (value.isPressed)
-                {
-                    Charge();
-                }
+                Charge();
             }
-            if(state == PlayingState.Charging)
+            if (state == PlayingState.Charging && !value.isPressed)
             {
-                if(!value.isPressed)
-                {
-                    Shoot();
-                }
-            }
-        }
-
-        private void Charge()
-        {
-            state = PlayingState.Charging;
-            //charge = true;
-            chargeStartTime = Time.time;
-        }
-
-
-        public void Shoot()
-        {
-            state = PlayingState.Attacking;
-            var force = Mathf.Clamp((Time.time - chargeStartTime) * settings.chargeMultiplier, 0, settings.maxForceDistance);
-            //Debug.Log("Force: " + force);
-            chargeStartTime = 0;
-            rigidbody.AddForce(transform.up * force * settings.forceMultiplier, ForceMode2D.Impulse);
-        }
-
-        private void CheckAttackOver()
-        {
-            if(state == PlayingState.Attacking && rigidbody.velocity.sqrMagnitude < Vector2.kEpsilonNormalSqrt)
-            {
-                Game.Instance.NextTurn();
-                state = PlayingState.Waiting;
+                Shoot();
             }
         }
 
         public void OnPosition(InputValue value)
         {
             mousePosition = value.Get<Vector2>();
-            //Debug.Log(mousePosition);
+        }
+
+        public void Reset()
+        {
+            rigidbody.velocity = Vector2.zero;
+            state = PlayingState.Waiting;
+            UpdateColor();
+        }
+
+        private void UpdateColor()
+        {
+            sprite.color = Game.Instance.CurrentColor;
+        }
+
+        private void Charge()
+        {
+            state = PlayingState.Charging;
+            chargeStartTime = Time.time;
+        }
+
+        private void Shoot()
+        {
+            state = PlayingState.Attacking;
+            var force = Mathf.Clamp((Time.time - chargeStartTime) * settings.chargeMultiplier, 0, settings.maxForceDistance);
+            rigidbody.AddForce(transform.up * force * settings.forceMultiplier, ForceMode2D.Impulse);
+            Game.Instance.Attack();
+            chargeStartTime = 0;
+        }
+
+        private void CheckAttackOver()
+        {
+            if (state == PlayingState.Attacking && rigidbody.velocity.sqrMagnitude < 1.0f)
+            {
+                NextTurn();
+            }
+        }
+
+        public void NextTurn()
+        {
+            Game.Instance.NextTurn();
+            Reset();
         }
 
         private void UpdateArrow()
@@ -97,6 +107,9 @@ namespace HackedDesign
             direction = (mainCamera.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, -1 * mainCamera.transform.position.z)) - this.transform.position).normalized;
 
             this.transform.up = direction;
+            forceArrow.gameObject.SetActive(state == PlayingState.Charging);
+            forceArrow.position = this.transform.position + (this.transform.up * Mathf.Clamp((Time.time - chargeStartTime) * settings.chargeMultiplier, 0, settings.maxForceDistance));
+            forceArrow.up = direction;
         }
 
         [System.Serializable]

@@ -28,8 +28,6 @@ namespace HackedDesign
 
         public static Level Generate(LevelGenTemplate template) => Generate(template, 0, 0, 0, 0);
 
-        //public static Level Generate(LevelGenTemplate template, int enemies) => Generate(template, 0, 0, 0, enemies);
-
         public static Level Generate(LevelGenTemplate template, int length, int height, int width, int enemies)
         {
             var generator = GetGenerator(template);
