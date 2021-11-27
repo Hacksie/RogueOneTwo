@@ -11,7 +11,7 @@ namespace HackedDesign
     {
         protected const string DefaultRoomStart = "wnew_entry";
 
-        public override Level GenerateLevel(LevelGenTemplate template, int length, int height, int width, int enemyCount)
+        public override Level GenerateLevel(LevelGenTemplate template, int levelCount, int length, int height, int width, int enemyCount)
         {
             if (template is null)
             {
@@ -32,7 +32,7 @@ namespace HackedDesign
 
             level = GenerateRandomLevel(template);
             GenerateElements(level);
-            GenerateEnemySpawns(level, enemyCount);
+            GenerateEnemySpawns(level, levelCount, enemyCount);
             level.Print();
             return level;
         }
@@ -70,7 +70,7 @@ namespace HackedDesign
             level.playerSpawn = new Spawn()
             {
                 type = Spawn.ENTITY_TYPE_PLAYER,
-                name = "Mouse",
+                name = "Player",
                 levelLocation = position
             };
             return position;
@@ -391,7 +391,7 @@ namespace HackedDesign
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool PositionHasRoom(Vector2Int pos, Level level) => ((pos.x >= level.template.levelWidth || pos.y >= level.template.levelHeight || pos.x < 0 || pos.y < 0) || (level.map[pos.y].rooms[pos.x] != null));
 
-        private void GenerateEnemySpawns(Level level, int enemyCount)
+        private void GenerateEnemySpawns(Level level, int levelCount, int enemyCount)
         {
             var candidates = new List<Vector2Int>();
             level.enemySpawnLocationList = new List<Spawn>();
@@ -409,7 +409,7 @@ namespace HackedDesign
 
             candidates.Randomize();
 
-            var enemyList = level.template.enemies;
+            var enemyList = level.template.enemies.Where(e => e.MinLevel <= levelCount).ToList();
 
             if (enemyList.Count == 0)
             {

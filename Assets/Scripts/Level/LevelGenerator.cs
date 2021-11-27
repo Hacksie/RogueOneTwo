@@ -17,7 +17,7 @@ namespace HackedDesign
         protected float randomChance = 0.75f;
         protected float lineOfSightChance = 0.3f;
 
-        public static ILevelGenerator GetGenerator(LevelGenTemplate template)
+        public static ILevelGenerator GetGenerator()
         {
             ILevelGenerator generator;
 
@@ -26,20 +26,20 @@ namespace HackedDesign
             return generator;
         }
 
-        public static Level Generate(LevelGenTemplate template) => Generate(template, 0, 0, 0, 0);
+        public static Level Generate(LevelGenTemplate template, int levelCount) => Generate(template, levelCount, 0, 0, 0, 0);
 
-        public static Level Generate(LevelGenTemplate template, int length, int height, int width, int enemies)
+        public static Level Generate(LevelGenTemplate template, int levelCount, int length, int height, int width, int enemies)
         {
-            var generator = GetGenerator(template);
-            return generator.GenerateLevel(template, length, height, width, enemies);
+            var generator = GetGenerator();
+            return generator.GenerateLevel(template, levelCount, length, height, width, enemies);
         }
 
 
-        public Level GenerateLevel(LevelGenTemplate template) => GenerateLevel(template, 0, 0, 0, 0);
+        public Level GenerateLevel(LevelGenTemplate template, int levelCount) => GenerateLevel(template, levelCount, 0, 0, 0, 0);
 
-        public Level GenerateLevel(LevelGenTemplate template, int enemies) => GenerateLevel(template, 0, 0, 0, enemies);
+        public Level GenerateLevel(LevelGenTemplate template, int levelCount, int enemies) => GenerateLevel(template, levelCount, 0, 0, 0, enemies);
 
-        public abstract Level GenerateLevel(LevelGenTemplate template, int length, int height, int width, int enemies);
+        public abstract Level GenerateLevel(LevelGenTemplate template, int levelCount, int length, int height, int width, int enemies);
 
         protected void GenerateElements(Level level)
         {

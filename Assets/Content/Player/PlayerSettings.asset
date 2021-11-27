@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: PlayerSettings
   m_EditorClassIdentifier: 
   maxForceDistance: 3.5
-  forceMultiplier: 10
+  forceMultiplier: 15
   chargeMultiplier: 3

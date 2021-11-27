@@ -35,7 +35,7 @@ namespace HackedDesign
                     continue;
                 }
 
-                var go = Instantiate(enemyPrefab, level.ConvertLevelPosToWorld(spawn.levelLocation) + spawn.worldOffset, Quaternion.identity, enemyParent.transform);
+                var go = Instantiate(enemyPrefab.gameObject, level.ConvertLevelPosToWorld(spawn.levelLocation) + spawn.worldOffset, Quaternion.identity, enemyParent.transform);
                 Enemy enemy = go.GetComponent<Enemy>();
                 pool.Add(enemy);
             }

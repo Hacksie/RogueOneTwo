@@ -71,8 +71,7 @@ namespace HackedDesign
         {
             Game.Instance.Player.Reset();
             enemyPool.ClearEnemies();
-            var level = LevelGenerator.Generate(levelTemplate, levelTemplate.levelLength, levelTemplate.levelHeight, levelTemplate.levelWidth, settings.baseEnemyCount + Data.level);
-            //levelRenderer.Initialize(this.playerController, this.levelParent);
+            var level = LevelGenerator.Generate(levelTemplate, Data.level, levelTemplate.levelLength, levelTemplate.levelHeight, levelTemplate.levelWidth, settings.baseEnemyCount + Data.level);
             levelRenderer.Render(level);
             player.transform.position = level.ConvertLevelPosToWorld(level.playerSpawn.levelLocation);
             Data.level++;

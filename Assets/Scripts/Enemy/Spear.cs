@@ -22,7 +22,7 @@ namespace HackedDesign
 
         public void Attack()
         {
-            Debug.Log("Spear attack");
+            //Debug.Log("Spear attack");
             var hit = Physics2D.Raycast(this.transform.position, this.transform.up, 100.0f, layerMask);
 
             // if(hit.collider != null)
@@ -32,7 +32,7 @@ namespace HackedDesign
 
             if (hit.collider != null && hit.collider.CompareTag("Player"))
             {
-                Debug.Log("Attack!");
+                //Debug.Log("Attack!");
                 rigidbody.AddForce(this.transform.up * movementForce, ForceMode2D.Impulse);
             }
         }

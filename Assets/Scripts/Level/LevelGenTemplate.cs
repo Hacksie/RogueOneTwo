@@ -26,6 +26,6 @@ namespace HackedDesign
         public GameObject exitElement;
         public List<GameObject> levelElements;
 
-        public List<GameObject> enemies;
+        public List<Enemy> enemies;
     }
 }

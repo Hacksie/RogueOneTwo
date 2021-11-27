@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: GameSettings
   m_EditorClassIdentifier: 
   colors:
-  - {r: 0, g: 0.854902, b: 1, a: 1}
+  - {r: 0, g: 0.8666668, b: 1, a: 1}
   - {r: 1, g: 0, b: 0.40784317, a: 1}
+  baseEnemyCount: 12
+  maxHealth: 3

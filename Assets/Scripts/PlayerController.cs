@@ -12,6 +12,8 @@ namespace HackedDesign
         [SerializeField] private new Rigidbody2D rigidbody;
         [SerializeField] private SpriteRenderer sprite;
         [SerializeField] private Transform forceArrow;
+        [SerializeField] private SpriteRenderer arrowSprite;
+
         [Header("Settings")]
         [SerializeField] private PlayerSettings settings;
 
@@ -71,6 +73,7 @@ namespace HackedDesign
         private void UpdateColor()
         {
             sprite.color = Game.Instance.CurrentColor;
+            arrowSprite.color = Game.Instance.CurrentColor;
         }
 
         private void Charge()
@@ -83,14 +86,14 @@ namespace HackedDesign
         {
             state = PlayingState.Attacking;
             var force = Mathf.Clamp((Time.time - chargeStartTime) * settings.chargeMultiplier, 0, settings.maxForceDistance);
-            rigidbody.AddForce(transform.up * force * settings.forceMultiplier, ForceMode2D.Impulse);
+            rigidbody.AddForce(direction * force * settings.forceMultiplier, ForceMode2D.Impulse);
             Game.Instance.Attack();
             chargeStartTime = 0;
         }
 
         private void CheckAttackOver()
         {
-            if (state == PlayingState.Attacking && rigidbody.velocity.sqrMagnitude < 1.0f)
+            if (state == PlayingState.Attacking && rigidbody.velocity.sqrMagnitude < 2.0f)
             {
                 NextTurn();
             }
@@ -106,9 +109,9 @@ namespace HackedDesign
         {
             direction = (mainCamera.ScreenToWorldPoint(new Vector3(mousePosition.x, mousePosition.y, -1 * mainCamera.transform.position.z)) - this.transform.position).normalized;
 
-            this.transform.up = direction;
+            //this.transform.up = direction;
             forceArrow.gameObject.SetActive(state == PlayingState.Charging);
-            forceArrow.position = this.transform.position + (this.transform.up * Mathf.Clamp((Time.time - chargeStartTime) * settings.chargeMultiplier, 0, settings.maxForceDistance));
+            forceArrow.position = this.transform.position + (direction * Mathf.Clamp((Time.time - chargeStartTime) * settings.chargeMultiplier, 0, settings.maxForceDistance));
             forceArrow.up = direction;
         }
 

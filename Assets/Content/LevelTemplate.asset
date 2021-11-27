@@ -17,7 +17,7 @@ MonoBehaviour:
   levelHeight: 10
   spanHorizontal: 8
   spanVertical: 8
-  enemyCount: 7
+  enemyCount: 12
   generateDoors: 1
   startingRoomString: wnww_entry
   doornsElement: {fileID: 0}
@@ -62,6 +62,11 @@ MonoBehaviour:
   - {fileID: 7014011915644132943, guid: 29a5a0cca2eec9d488afe217c5a1a7fa, type: 3}
   - {fileID: 2987456321400321678, guid: 8f8045c42b8b139418445eb634652d79, type: 3}
   enemies:
-  - {fileID: 1739751642503693436, guid: e4afbe45c86d81246a8a2adbe5eeb9de, type: 3}
-  - {fileID: 7066247932576893352, guid: 98a841581165705419d5440633a5c3ed, type: 3}
-  - {fileID: 6811751751402096134, guid: a453da3ddbb89214baaf61a9713c6c99, type: 3}
+  - {fileID: 6048164593335855170, guid: b21a02b33ffb7e148ac26d52669ef6e8, type: 3}
+  - {fileID: 7388301609296819647, guid: 11b83e397553c8343974d2c846c50a7e, type: 3}
+  - {fileID: 4700485460651136632, guid: 29e0b1e4cf8cd2345a2be5b36d8beab2, type: 3}
+  - {fileID: 5597516632430436987, guid: 975c483c871f523489eb18082182b5d4, type: 3}
+  - {fileID: 2699959330269537982, guid: 86c7c184f55af554f9fa3281df1a45bd, type: 3}
+  - {fileID: 5742824894724093338, guid: 01004bcd89a4bf74fb9e24bf74fc137b, type: 3}
+  - {fileID: 154746428757179374, guid: a4928e258642eb04b8538ce5a1798de7, type: 3}
+  - {fileID: 1014379510835883484, guid: b8ff5078eac733241a21b347e6d1a93e, type: 3}
