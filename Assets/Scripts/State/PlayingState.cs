@@ -8,9 +8,9 @@ namespace HackedDesign
     {
         private PlayerController player;
         private UI.AbstractPresenter hudPresenter;
-        private EnemyPool enemyPool;
+        private Pool enemyPool;
 
-        public PlayingState(PlayerController player, EnemyPool enemyPool, UI.AbstractPresenter hudPresenter)
+        public PlayingState(PlayerController player, Pool enemyPool, UI.AbstractPresenter hudPresenter)
         {
             this.player = player;
             this.hudPresenter = hudPresenter;
@@ -22,6 +22,8 @@ namespace HackedDesign
         public void Begin()
         {
             this.hudPresenter.Show();
+            AudioManager.Instance.PlayPlayMusic();
+            Game.Instance.NextLevel();
             //Cursor.visible = false;
         }
 
@@ -29,6 +31,7 @@ namespace HackedDesign
         {
             //Cursor.visible = true;
             this.hudPresenter.Hide();
+            AudioManager.Instance.StopPlayMusic();
             //this.player.Freeze();
         }
 
@@ -46,7 +49,7 @@ namespace HackedDesign
 
         public void Start()
         {
-            //GameManager.Instance.SetPaused();
+            Game.Instance.SetMenu();
         }
     }
 }

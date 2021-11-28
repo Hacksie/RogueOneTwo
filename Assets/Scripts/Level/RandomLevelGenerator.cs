@@ -33,6 +33,8 @@ namespace HackedDesign
             level = GenerateRandomLevel(template);
             GenerateElements(level);
             GenerateEnemySpawns(level, levelCount, enemyCount);
+            GeneratePropSpawns(level, levelCount, template.propCount);
+            GenerateTrapSpawns(level, levelCount, UnityEngine.Random.Range(0, levelCount));
             level.Print();
             return level;
         }
@@ -435,5 +437,100 @@ namespace HackedDesign
 
             }
         }
+
+        private void GeneratePropSpawns(Level level, int levelCount, int propCount)
+        {
+            var candidates = new List<Vector2Int>();
+            level.propSpawnLocationList = new List<Spawn>();
+
+            for (int y = 0; y < level.map.Count(); y++)
+            {
+                for (int x = 0; x < level.map[y].rooms.Count(); x++)
+                {
+                    if (level.map[y].rooms[x] != null && !level.map[y].rooms[x].isEntry && !level.map[y].rooms[x].isExit)
+                    {
+                        candidates.Add(new Vector2Int(x, y));
+                    }
+                }
+            }
+
+            candidates.Randomize();
+
+            var propList = level.template.props.ToList();
+
+            if (propList.Count == 0)
+            {
+                Debug.Log("RandomLevelGenerator " + "No props in template");
+                return;
+            }
+
+            Vector2[] worldOffsetList = { new Vector2(-2.5f, -2.5f), new Vector2(-2.5f, 2.5f), new Vector2(2.5f, 2.5f), new Vector2(2.5f, -2.5f) };
+
+
+            List<Vector2Int> list = candidates.Take(propCount).ToList();
+            for (int i = list.Count - 1; i >= 0; i--)
+            {
+                Vector2Int candidate = list[i];
+                var prop = propList[UnityEngine.Random.Range(0, propList.Count)];
+
+                level.propSpawnLocationList.Add(
+                    new Spawn()
+                    {
+                        type = Spawn.ENTITY_TYPE_PROP,
+                        name = prop.name,
+                        levelLocation = candidate,
+                        worldOffset = worldOffsetList[UnityEngine.Random.Range(0, worldOffsetList.Length)]
+                    }
+                );
+
+            }
+        }
+
+        private void GenerateTrapSpawns(Level level, int levelCount, int trapCount)
+        {
+            var candidates = new List<Vector2Int>();
+            level.trapSpawnLocationList = new List<Spawn>();
+
+            for (int y = 0; y < level.map.Count(); y++)
+            {
+                for (int x = 0; x < level.map[y].rooms.Count(); x++)
+                {
+                    if (level.map[y].rooms[x] != null && !level.map[y].rooms[x].isEntry && !level.map[y].rooms[x].isExit)
+                    {
+                        candidates.Add(new Vector2Int(x, y));
+                    }
+                }
+            }
+
+            candidates.Randomize();
+
+            var trapList = level.template.traps.ToList();
+
+            if (trapList.Count == 0)
+            {
+                Debug.Log("RandomLevelGenerator " + "No traps in template");
+                return;
+            }
+
+            Vector2[] worldOffsetList = { new Vector2(-1.5f, -1.5f), new Vector2(-1.5f, 1.5f), new Vector2(1.5f, 1.5f), new Vector2(1.5f, -1.5f) };
+
+            List<Vector2Int> list = candidates.Take(trapCount).ToList();
+            for (int i = list.Count - 1; i >= 0; i--)
+            {
+                Vector2Int candidate = list[i];
+                var trap = trapList[UnityEngine.Random.Range(0, trapList.Count)];
+
+                level.trapSpawnLocationList.Add(
+                    new Spawn()
+                    {
+                        type = Spawn.ENTITY_TYPE_TRAP,
+                        name = trap.name,
+                        levelLocation = candidate,
+                        worldOffset = worldOffsetList[UnityEngine.Random.Range(0, worldOffsetList.Length)]
+                    }
+                );
+
+            }
+        }        
     }
 }

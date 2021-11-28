@@ -13,9 +13,13 @@ namespace HackedDesign
         [SerializeField] private SpriteRenderer sprite;
         [SerializeField] private Transform forceArrow;
         [SerializeField] private SpriteRenderer arrowSprite;
+        [SerializeField] private GameObject alert;
+        [SerializeField] private ParticleSystem rampage;
+        [SerializeField] private GameObject invuln;
 
         [Header("Settings")]
         [SerializeField] private PlayerSettings settings;
+        [SerializeField] private LayerMask enemies;
 
         private Vector2 mousePosition;
         private Vector3 direction;
@@ -23,8 +27,15 @@ namespace HackedDesign
         private PlayingState state = PlayingState.Waiting;
 
         private float chargeStartTime = 0;
+        private float rampageTime = 0;
+        private float invulnTime = 0;
+        private bool rampaging = true;
+        private bool invulnerable = true;
 
         public bool Attacking { get { return state == PlayingState.Attacking; } }
+
+        public bool Rampaging { get => rampaging; private set => rampaging = value; }
+        public bool Invulnerable { get => invulnerable; private set => invulnerable = value; }
 
         void Awake()
         {
@@ -44,6 +55,8 @@ namespace HackedDesign
         {
             UpdateArrow();
             CheckAttackOver();
+            CheckRampageOver();
+            CheckInvulnOver();
         }
 
         public void OnFire(InputValue value)
@@ -63,14 +76,75 @@ namespace HackedDesign
             mousePosition = value.Get<Vector2>();
         }
 
+        public void OnEscape()
+        {
+            Game.Instance.State.Start();
+        }
+
         public void Reset()
+        {
+            Stop();
+            AlertOff();
+            Invulnerable = false;
+            invulnTime = 0;
+            invuln.SetActive(false);
+            rampaging = false;
+            rampageTime = 0;
+            rigidbody.MovePosition(Vector2.zero);
+            direction = Vector2.zero;
+        }
+
+        public void Stop()
         {
             rigidbody.velocity = Vector2.zero;
             state = PlayingState.Waiting;
+            chargeStartTime = 0;
             UpdateColor();
         }
 
-        private void UpdateColor()
+        public void AlertOn() => alert.SetActive(true);
+        public void AlertOff() => alert.SetActive(false);
+
+        public void RampageOn()
+        {
+            Rampaging = true;
+            rampageTime = Time.time + settings.rampageTime;
+            InvulnOff();
+            RampagePlay();
+            AudioManager.Instance.StopPlayMusic();
+            AudioManager.Instance.PlayRampageMusic();
+        }
+        public void RampageOff()
+        {
+            rampaging = false;
+            rampage.Stop();
+            AudioManager.Instance.StopRampageMusic();
+            AudioManager.Instance.PlayPlayMusic();
+            AlertOff();
+        }
+
+        public void RampagePlay() => rampage.Play();
+        
+        public void InvulnOn()
+        {
+            RampageOff();
+            Invulnerable = true;
+            invulnTime = Time.time + settings.invulvTime;
+            invuln.SetActive(true);
+            AudioManager.Instance.StopPlayMusic();
+            AudioManager.Instance.PlayInvulnMusic();
+        }
+        public void InvulnOff()
+        {
+            Invulnerable = false;
+            invuln.SetActive(false);
+            AudioManager.Instance.StopInvulnMusic();
+            AudioManager.Instance.PlayPlayMusic();
+            AlertOff();
+        }
+
+
+        public void UpdateColor()
         {
             sprite.color = Game.Instance.CurrentColor;
             arrowSprite.color = Game.Instance.CurrentColor;
@@ -95,14 +169,54 @@ namespace HackedDesign
         {
             if (state == PlayingState.Attacking && rigidbody.velocity.sqrMagnitude < 2.0f)
             {
-                NextTurn();
+                if (Rampaging)
+                {
+                    RampageAttack();
+                    RampagePlay();
+                }
+                Game.Instance.NextTurn();
             }
         }
 
-        public void NextTurn()
+        private void RampageAttack()
         {
-            Game.Instance.NextTurn();
-            Reset();
+            var hits = Physics2D.OverlapCircleAll(this.transform.position, settings.rampageRadius, enemies);
+
+            foreach(var h in hits)
+            {
+                var enemy = h.gameObject.GetComponent<Enemy>();
+
+                if(enemy != null)
+                {
+                    enemy.Explode();
+                }
+            }
+        }
+
+        private void CheckRampageOver()
+        {
+            if (Rampaging && Time.time > rampageTime)
+            {
+                RampageOff();
+                AlertOff();
+            }
+            else if (Rampaging)
+            {
+                AlertOn();
+            }
+        }
+
+        private void CheckInvulnOver()
+        {
+            if (Invulnerable && Time.time > invulnTime)
+            {
+                InvulnOff();
+                AlertOff();
+            }
+            else if (Invulnerable)
+            {
+                AlertOn();
+            }
         }
 
         private void UpdateArrow()

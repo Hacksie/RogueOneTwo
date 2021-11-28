@@ -27,7 +27,6 @@ namespace HackedDesign
 
             if (hit.collider != null && hit.collider.CompareTag("Player"))
             {
-                Debug.Log("hide");
                 rigidbody.AddForce(direction * movementForce, ForceMode2D.Impulse);
             }
         }

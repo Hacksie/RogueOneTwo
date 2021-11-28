@@ -15,5 +15,7 @@ MonoBehaviour:
   colors:
   - {r: 0, g: 0.8666668, b: 1, a: 1}
   - {r: 1, g: 0, b: 0.40784317, a: 1}
-  baseEnemyCount: 12
+  baseEnemyCount: 4
+  baseLevelSize: 3
   maxHealth: 3
+  maxLevels: 256

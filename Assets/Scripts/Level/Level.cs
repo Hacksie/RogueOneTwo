@@ -14,6 +14,8 @@ namespace HackedDesign
         public int length;
         public Spawn playerSpawn;
         public List<Spawn> enemySpawnLocationList;
+        public List<Spawn> propSpawnLocationList;
+        public List<Spawn> trapSpawnLocationList;
 
         public Level(LevelGenTemplate template)
         {
@@ -179,6 +181,8 @@ namespace HackedDesign
         public const string ENTITY_TYPE_NPC = "npc";
         public const string ENTITY_TYPE_ENEMY = "enemy";
         public const string ENTITY_TYPE_TRAP = "trap";
+        public const string ENTITY_TYPE_PROP = "prop";
+        public const string ENTITY_TYPE_PICKUP = "pickup";
 
         public string type;
         public string name;

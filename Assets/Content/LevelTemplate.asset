@@ -12,16 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ab60e2edfe755b429f3911f5131e288, type: 3}
   m_Name: LevelTemplate
   m_EditorClassIdentifier: 
-  levelLength: 7
-  levelWidth: 10
-  levelHeight: 10
+  levelLength: 5
+  levelWidth: 5
+  levelHeight: 5
   spanHorizontal: 8
   spanVertical: 8
-  enemyCount: 12
+  enemyCount: 6
+  propCount: 12
   generateDoors: 1
   startingRoomString: wnww_entry
   doornsElement: {fileID: 0}
-  doorewElement: {fileID: 0}
+  doorewElement: {fileID: 681033774057501381, guid: 9903494312715a948b76ab8a89c340af, type: 3}
   entryElement: {fileID: 4518452413851457238, guid: 84d29769d07b3b248be41d5ee4bc5441, type: 3}
   exitElement: {fileID: 1605229046914695109, guid: 2c39f2fefbd5c7d4287f47aad29c0649, type: 3}
   levelElements:
@@ -70,3 +71,16 @@ MonoBehaviour:
   - {fileID: 5742824894724093338, guid: 01004bcd89a4bf74fb9e24bf74fc137b, type: 3}
   - {fileID: 154746428757179374, guid: a4928e258642eb04b8538ce5a1798de7, type: 3}
   - {fileID: 1014379510835883484, guid: b8ff5078eac733241a21b347e6d1a93e, type: 3}
+  props:
+  - {fileID: 6886891780902973501, guid: 046bfbf11b8cde94fa02e461ae6177b3, type: 3}
+  - {fileID: 6999968499357860421, guid: 07bbd26981d9a834886b17a5eef63399, type: 3}
+  - {fileID: 6912829946005575985, guid: 8282e3513eb5d5445b67b892919aab60, type: 3}
+  - {fileID: 3442986843791421259, guid: efb815384313a3e4682f8db22b9e0adb, type: 3}
+  - {fileID: 1202672134924322123, guid: 86bb72673c4160c4c9f5eca2dee5968e, type: 3}
+  - {fileID: 1746556448246395194, guid: 9e14fe1431b589e458fac13dc3a2ebb9, type: 3}
+  - {fileID: 2889752514623814593, guid: 233bf11ebb21d214e8a577187f6eabbe, type: 3}
+  pickups:
+  - {fileID: 5582990045676877739, guid: 4597216f38c807245939b6b90461da77, type: 3}
+  traps:
+  - {fileID: 721079922055224142, guid: ac913164baf52c64a94af94d57275f90, type: 3}
+  - {fileID: 6483282499112047491, guid: e779641e7e22a3341a533dc4c3d0b8c8, type: 3}

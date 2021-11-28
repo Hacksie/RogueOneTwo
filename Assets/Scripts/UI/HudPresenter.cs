@@ -17,7 +17,7 @@ namespace HackedDesign.UI
             currentLevel.text = Game.Instance.Data.level.ToString();
             currentTurn.text = Game.Instance.Data.turn.ToString();
             //health.text = Game.Instance.Data.health.ToString();
-            enemies.text = (EnemyPool.Instance.MaxEnemyCount - EnemyPool.Instance.EnemyCount).ToString() + "/" + EnemyPool.Instance.MaxEnemyCount.ToString();
+            enemies.text = (Pool.Instance.MaxEnemyCount - Pool.Instance.EnemyCount).ToString() + "/" + Pool.Instance.MaxEnemyCount.ToString();
 
             health1.gameObject.SetActive(Game.Instance.Data.health >= 1);
             health2.gameObject.SetActive(Game.Instance.Data.health >= 2);

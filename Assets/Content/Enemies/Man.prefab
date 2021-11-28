@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88a84e4b370b2b340a1ed69f7cb3539f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rigidbody: {fileID: 0}
+  rb: {fileID: 0}
   sprite: {fileID: 8632059442040095124}
   collider: {fileID: 5447291390044745780}
   minLevel: 3
@@ -86,7 +86,7 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 63
-  movementForce: 20
+  movementForce: 25
 --- !u!50 &3812180684127984644
 Rigidbody2D:
   serializedVersion: 4

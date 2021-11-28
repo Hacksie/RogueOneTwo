@@ -10,7 +10,6 @@ namespace HackedDesign
     {
         [SerializeField] private new Rigidbody2D rigidbody;
         [SerializeField] private LayerMask layerMask;
-        [SerializeField] private float movementForce = 20;
         [SerializeField] private Transform fireSprite;
 
         void Awake()
@@ -29,7 +28,6 @@ namespace HackedDesign
 
             if (hit.collider != null && hit.collider.CompareTag("Player"))
             {
-                Debug.Log("cultist attack");
                 //var distance = (Game.Instance.Player.transform.position - this.transform.position).magnitude;
                 fireSprite.gameObject.SetActive(true);
                 var position = Quaternion.AngleAxis(Random.Range(-45.0f,45.0f), Vector3.back) * direction * Random.Range(3, 8);

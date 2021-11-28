@@ -17,6 +17,8 @@ namespace HackedDesign
             DestroyLevel();
             PopulateLevelTilemap(level);
             PopulateEnemySpawns(level);
+            PopulatePropSpawns(level);
+            PopulateTrapSpawns(level);
         }
 
         public void DestroyLevel()
@@ -109,6 +111,8 @@ namespace HackedDesign
 
         GameObject FindRoomEntity(string name, LevelGenTemplate levelGenTemplate) => levelGenTemplate.levelElements.FirstOrDefault(g => g != null && g.name == name);
 
-        public void PopulateEnemySpawns(Level level) => EnemyPool.Instance.SpawnEnemies(level);
+        public void PopulateEnemySpawns(Level level) => Pool.Instance.SpawnEnemies(level);
+        public void PopulatePropSpawns(Level level) => Pool.Instance.SpawnProps(level);
+        public void PopulateTrapSpawns(Level level) => Pool.Instance.SpawnTraps(level);
     }
 }

@@ -9,13 +9,13 @@ namespace HackedDesign
 
         void Update()
         {
-            lockSprite.gameObject.SetActive(EnemyPool.Instance.EnemyCount != 0);
-            unlockSprite.gameObject.SetActive(EnemyPool.Instance.EnemyCount == 0);
+            lockSprite.gameObject.SetActive(Pool.Instance.EnemyCount != 0);
+            unlockSprite.gameObject.SetActive(Pool.Instance.EnemyCount == 0);
         }
 
         void OnTriggerEnter2D(Collider2D other)
         {
-            if(other.CompareTag("Player") && EnemyPool.Instance.EnemyCount == 0)
+            if(other.CompareTag("Player") && Pool.Instance.EnemyCount == 0)
             {
                 Game.Instance.NextLevel();
             }

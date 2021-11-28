@@ -15,3 +15,6 @@ MonoBehaviour:
   maxForceDistance: 3.5
   forceMultiplier: 15
   chargeMultiplier: 3
+  rampageTime: 20
+  invulvTime: 20
+  rampageRadius: 2.5

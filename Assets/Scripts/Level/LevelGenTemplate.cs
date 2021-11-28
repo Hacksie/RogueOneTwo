@@ -15,6 +15,7 @@ namespace HackedDesign
         public float spanHorizontal = 4;
         public float spanVertical = 4;
         public int enemyCount = 0;
+        public int propCount = 0;
         
         public bool generateDoors = true;
         
@@ -27,5 +28,8 @@ namespace HackedDesign
         public List<GameObject> levelElements;
 
         public List<Enemy> enemies;
+        public List<GameObject> props;
+        public List<GameObject> pickups;
+        public List<GameObject> traps;
     }
 }

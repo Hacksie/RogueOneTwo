@@ -10,11 +10,15 @@ namespace HackedDesign
         [SerializeField] private LevelRenderer levelRenderer = null;
         [SerializeField] private LevelGenTemplate levelTemplate = null;
         [SerializeField] private PlayerController player = null;
-        [SerializeField] private EnemyPool enemyPool = null;
+        [SerializeField] private Pool pool = null;
+        [SerializeField] private CameraShake cameraShake = null;
         [Header("Data")]
         [SerializeField] private GameData data;
         [Header("UI")]
         [SerializeField] private UI.HudPresenter hudCanvas = null;
+        [SerializeField] private UI.MenuPresenter menuCanvas = null;
+        [SerializeField] private UI.GameOverPresenter gameoverCanvas = null;
+        [SerializeField] private UI.GameOverPresenter winCanvas = null;
 
 
         public Color CurrentColor { get { return settings.colors[Data.currentColor]; } }
@@ -23,6 +27,8 @@ namespace HackedDesign
         public static Game Instance { get; private set; }
         public PlayerController Player { get => player; set => player = value; }
         public GameData Data { get => data; set => data = value; }
+        public CameraShake CameraShake { get { return cameraShake; } private set { cameraShake = value; } }
+        public LevelRenderer LevelRenderer { get => levelRenderer; set => levelRenderer = value; }
 
         private IState state = new EmptyState();
 
@@ -38,8 +44,9 @@ namespace HackedDesign
                 state = value;
                 state.Begin();
             }
-        }        
+        }
 
+        
         Game()
         {
             Instance = this;
@@ -48,62 +55,80 @@ namespace HackedDesign
         void Start()
         {
             Reset();
-            NextLevel();
             HideAllUI();
-            SetPlaying();
+            SetMenu();
         }
 
         void Update() => state.Update();
-        void FixedUpdate() => state.FixedUpdate();             
+        void FixedUpdate() => state.FixedUpdate();
 
-        public void SetPlaying() => State = new PlayingState(Player, enemyPool, hudCanvas);
-        public void SetGameOver() => State = new GameOverState();
+        public void SetMenu() => State = new MenuState(player, menuCanvas);
+        public void SetPlaying() => State = new PlayingState(Player, pool, hudCanvas);
+        public void SetGameOver() => State = new GameOverState(gameoverCanvas);
+        public void SetWin() => State = new WinState(winCanvas);
 
-        private void Reset()
+        public void Reset()
         {
+            Game.Instance.LevelRenderer.DestroyLevel();
             Data.Reset(settings);
             Game.Instance.Player.Reset();
-            Game.Instance.Player.Reset();
-            enemyPool.ClearEnemies();
+            pool.ClearEnemies();
         }
 
         public void NextLevel()
         {
-            Game.Instance.Player.Reset();
-            enemyPool.ClearEnemies();
-            var level = LevelGenerator.Generate(levelTemplate, Data.level, levelTemplate.levelLength, levelTemplate.levelHeight, levelTemplate.levelWidth, settings.baseEnemyCount + Data.level);
-            levelRenderer.Render(level);
-            player.transform.position = level.ConvertLevelPosToWorld(level.playerSpawn.levelLocation);
-            Data.level++;
-        }
-
-        public void AddHealth(int amount)
-        {
-            Data.health = Mathf.Clamp(Data.health + amount, 0, settings.maxHealth);
-            if(Data.health <= 0)
+            if (Data.level >= settings.maxLevels)
             {
-                SetGameOver();
+                SetWin();
+            }
+            else
+            {
+                Game.Instance.Player.Reset();
+                pool.ClearEnemies();
+                AudioManager.Instance.StopAllMusic();
+                Data.level++;
+                var level = LevelGenerator.Generate(levelTemplate, Data.level, settings.baseLevelSize + Data.level, settings.baseLevelSize + Data.level, settings.baseLevelSize + Data.level, settings.baseEnemyCount + Data.level);
+                LevelRenderer.Render(level);
+                player.transform.position = level.ConvertLevelPosToWorld(level.playerSpawn.levelLocation) + Vector2.up;
+                AudioManager.Instance.PlayPlayMusic();
             }
         }
 
         public void NextTurn()
         {
             Data.turn++;
+            SwitchColor();
+            Player.Stop();
+            pool.UpdateEnemiesNextTurn();
+        }
+
+        public void SwitchColor()
+        {
             Data.currentColor++;
             if (Data.currentColor > 1)
                 Data.currentColor = 0;
+        }
 
-            enemyPool.UpdateEnemiesNextTurn();
+        public void AddHealth(int amount)
+        {
+            Data.health = Mathf.Clamp(Data.health + amount, 0, settings.maxHealth);
+            if (Data.health <= 0)
+            {
+                SetGameOver();
+            }
         }
 
         public void Attack()
         {
-            enemyPool.Attack();   
+            pool.Attack();
         }
 
         private void HideAllUI()
         {
             hudCanvas.Hide();
+            menuCanvas.Hide();
+            gameoverCanvas.Hide();
+            winCanvas.Hide();
         }
 
     }

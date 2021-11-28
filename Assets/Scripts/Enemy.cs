@@ -8,7 +8,7 @@ namespace HackedDesign
 {
     public class Enemy : MonoBehaviour
     {
-        [SerializeField] private new Rigidbody2D rigidbody;
+        [SerializeField] private Rigidbody2D rb;
         [SerializeField] private SpriteRenderer sprite;
         [SerializeField] private new Collider2D collider;
         [SerializeField] private int minLevel = 0;
@@ -19,13 +19,13 @@ namespace HackedDesign
         //private Color currentColor;
         public Color CurrentColor { get { return sprite.color; } }
 
-        public int MinLevel { get => minLevel;}
+        public int MinLevel { get => minLevel; }
 
         void Awake()
         {
-            if (rigidbody == null)
+            if (rb == null)
             {
-                rigidbody = GetComponent<Rigidbody2D>();
+                rb = GetComponent<Rigidbody2D>();
             }
         }
 
@@ -55,39 +55,46 @@ namespace HackedDesign
             sprite.color = offsetColor ? Game.Instance.OppositeColor : Game.Instance.CurrentColor;
         }
 
-        private void Explode()
+        public void Explode()
         {
-            EnemyPool.Instance.KillEnemy(this);
+            Game.Instance.CameraShake.SmallShake();
+            AudioManager.Instance.PlayKillSFX();
+            Pool.Instance.SpawnExplosion(this.transform.position);
+            Pool.Instance.KillEnemy(this);
+        }
+
+        private void Collide()
+        {
+            Game.Instance.AddHealth(-1);
+            this.rb.velocity = Vector2.zero;
+
+            Game.Instance.NextTurn();
+            Game.Instance.CameraShake.BigShake();
+            AudioManager.Instance.PlayCollideSFX();
         }
 
         void OnCollisionEnter2D(Collision2D other)
         {
-            if (other.collider.CompareTag("Player") && Game.Instance.Player.Attacking && sprite.color != Game.Instance.CurrentColor)
-            {
-                Game.Instance.AddHealth(-1);
-                this.rigidbody.velocity = Vector2.zero;
-
-                Game.Instance.Player.NextTurn();
-            }
-            else if (other.collider.CompareTag("Player") && Game.Instance.Player.Attacking && sprite.color == Game.Instance.CurrentColor)
+            if (other.collider.CompareTag("Player") && (Game.Instance.Player.Invulnerable || Game.Instance.Player.Attacking && sprite.color == Game.Instance.CurrentColor))
             {
                 Explode();
-            }            
+            }
+            else if (other.collider.CompareTag("Player") && Game.Instance.Player.Attacking && sprite.color != Game.Instance.CurrentColor)
+            {
+                Collide();
+            }
         }
 
         void OnCollisionStay2D(Collision2D other)
         {
-            if (other.collider.CompareTag("Player") && Game.Instance.Player.Attacking && sprite.color != Game.Instance.CurrentColor)
-            {
-                Game.Instance.AddHealth(-1);
-                this.rigidbody.velocity = Vector2.zero;
-
-                Game.Instance.Player.NextTurn();
-            }
-            else if (other.collider.CompareTag("Player") && Game.Instance.Player.Attacking && sprite.color == Game.Instance.CurrentColor)
+            if (other.collider.CompareTag("Player") && (Game.Instance.Player.Invulnerable ||  Game.Instance.Player.Attacking && sprite.color == Game.Instance.CurrentColor))
             {
                 Explode();
-            }            
-        }        
+            }
+            else if (other.collider.CompareTag("Player") && Game.Instance.Player.Attacking && sprite.color != Game.Instance.CurrentColor)
+            {
+                Collide();
+            }
+        }
     }
 }
